@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@*----------------- INSTALAR VERSION DE BOOSTRAP 4.6 ---------------------*@
+
+<div class="row mt-4">
+    <div class="col-12">
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5>Ejemplo descarga excel</h5>
+            </div>
+            <div class="card-body">
+
+                <form action="@Url.Action("exportar","Home")" method="post">
+                    <div class="form-row align-items-end">
+                        <div class="col-sm-3">
+                            <label class="form-text">Empleado</label>
+                            <select class="form-control" name="empleado"></select>
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-text">Fecha Inicio</label>
+                            <input type="text" class="form-control"  name="fechainicio" autocomplete="off" />
+                        </div>
+                        <div class="col-sm-3">
+                            <label class="form-text">Fecha Fin</label>
+                            <input type="text" class="form-control" name="fechafin" autocomplete="off" />
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-success btn-block" type="submit">Descargar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+            $("input[name=fechainicio]").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true
+            }).datepicker('setDate', new Date());
+
+            $("input[name=fechafin]").datepicker({
+                dateFormat: "dd/mm/yy",
+                changeMonth: true,
+                changeYear: true
+            }).datepicker('setDate', new Date());
+
+
+            $("select[name=empleado]").append(
+                $("<option>").attr({ "value": "0" }).text("Todos")
+            )
+
+            $.get("@Url.Action("obtenerEmpleado", "Home")", function (data) {
+
+                $.each(data, function (i, fila) {
+                    $("select[name=empleado]").append(
+                        $("<option>").attr({ "value": fila._IdEmpleado }).text(fila._Nombres)
+                    )
+                })
+            });
+
+        })
+    </script>
+
+}
